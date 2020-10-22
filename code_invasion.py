@@ -10,9 +10,15 @@ class FourthDimensionInvasion:
     def __init__(self):
         pygame.init()
         self.settings = Settings()
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.settings.screen_width = self.screen.get_rect().width
-        self.settings.screen_height = self.screen.get_rect().height
+
+        #! SCREEN SIZE in SETTINGS:
+        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+
+        #! FULL SCREEN MODE:
+        #self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        #self.settings.screen_width = self.screen.get_rect().width
+        #self.settings.screen_height = self.screen.get_rect().height
+
         pygame.display.set_caption("4thDimension_Invasion")
 
         self.ship = Ship(self)
@@ -112,7 +118,7 @@ class FourthDimensionInvasion:
         number_aliens_x = available_space_x // (2 * alien_width)
         #* Determine the number of rows of aliens that fit on the screen
         ship_height = self.ship.rect.height
-        available_space_y = (self.settings.screen_height - (11 * alien_height) - ship_height)
+        available_space_y = (self.settings.screen_height - (6 * alien_height) - ship_height)
         number_rows = available_space_y // (2 * alien_height)
         #* Creating the the full alien fleet
         for row_number in range(number_rows):    
@@ -125,7 +131,7 @@ class FourthDimensionInvasion:
         alien_width, alien_height = alien.rect.size
         alien.x = alien_width + 2 * alien_width * alien_number
         alien.rect.x = alien.x
-        alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+        alien.rect.y = alien.rect.height + 1.5 * alien.rect.height * row_number
         self.aliens.add(alien)
 
     def _check_fleet_edges(self):
