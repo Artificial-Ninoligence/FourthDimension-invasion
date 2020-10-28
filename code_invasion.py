@@ -42,14 +42,15 @@ class FourthDimensionInvasion:
             #* Watch for mouse and keyboard events
             self._check_events()
 
-            #* Calling the ship's update() method in the loop
-            self.ship.update()
+            if self.stats.game_active:
+                #* Calling the ship's update() method in the loop
+                self.ship.update()
 
-            #* Calling the bullet's update
-            self._update_bullets()
+                #* Calling the bullet's update
+                self._update_bullets()
 
-            #* Calling the alien's update
-            self._update_aliens()
+                #* Calling the alien's update
+                self._update_aliens()
 
             #* Redraw the screen during each pass through the loop
             self._update_screen()
@@ -140,6 +141,9 @@ class FourthDimensionInvasion:
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             self._ship_hit()
 
+        #* Looking for any alien that hit the bottom edge
+        self._check_aliens_bottom()
+
     def _create_fleet(self):
         #* Creating alien fleets
 
@@ -169,10 +173,19 @@ class FourthDimensionInvasion:
         self.aliens.add(alien)
 
     def _check_fleet_edges(self):
-        #* Responding if any alien has reached an edge
+        #* Checking if any alien has reached the left or right edge
         for alien in self.aliens.sprites():
             if alien.check_edges():
                 self._change_fleet_direction()
+                break
+
+    def _check_aliens_bottom(self):
+        #* Checking if any alien has reached the bottom edge
+        screen_rect = self.screen.get_rect()
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= screen_rect.bottom:
+                #* Create the same effect as if the ship got hit
+                self._ship_hit()
                 break
 
     def _change_fleet_direction(self):
@@ -186,20 +199,22 @@ class FourthDimensionInvasion:
 
     def _ship_hit(self):
         #* Responding when the ship is hit
+        if self.stats.ships_left > 0:
+            #* Decrementing the ship left
+            self.stats.ships_left -= 1
 
-        #* Decrementing the ship left
-        self.stats.ships_left -= 1
+            #* Getting rid of the remaining aliens and bullets
+            self.aliens.empty()
+            self.bullets.empty()
 
-        #* Getting rid of the remaining aliens and bullets
-        self.aliens.empty()
-        self.bullets.empty()
+            #* Creating new fleet and centering ship
+            self._create_fleet()
+            self.ship.center_ship()
 
-        #* Creating new fleet and centering ship
-        self._create_fleet()
-        self.ship.center_ship()
-
-        #* Pause
-        sleep(0.5)
+            #* Pause
+            sleep(0.5)
+        else:
+            self.stats.game_active = False
 
 #! SCREEN METHOD
 
