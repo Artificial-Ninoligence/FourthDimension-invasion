@@ -53,3 +53,9 @@ class Ship:
 
         #* Draw the ship at tis current location
         self.screen.blit(self.image, self.rect)
+
+    def center_ship(self):
+        #* Centering the new ship after being hit
+
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
