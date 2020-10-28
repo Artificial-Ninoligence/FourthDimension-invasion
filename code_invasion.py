@@ -31,12 +31,16 @@ class FourthDimensionInvasion:
         while True:
             #* Watch for mouse and keyboard events
             self._check_events()
+
             #* Calling the ship's update() method in the loop
             self.ship.update()
+
             #* Calling the bullet's update
             self._update_bullets()
+
             #* Calling the alien's update
             self._update_aliens()
+            
             #* Redraw the screen during each pass through the loop
             self._update_screen()
 
@@ -94,6 +98,7 @@ class FourthDimensionInvasion:
     def _update_bullets(self):
         #* Update bullet's positions
         self.bullets.update()
+
         #* Get rid of all bullets that disappeared
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
@@ -105,6 +110,7 @@ class FourthDimensionInvasion:
     def _update_aliens(self):
         #* Checking if the fleet at the edge
         self._check_fleet_edges()
+
         #* Updating all the alien's positions in the fleet
         self.aliens.update()
 
@@ -116,10 +122,12 @@ class FourthDimensionInvasion:
         alien_width, alien_height = alien.rect.size
         available_space_x = self.settings.screen_width - (2 * alien_width)
         number_aliens_x = available_space_x // (2 * alien_width)
+
         #* Determine the number of rows of aliens that fit on the screen
         ship_height = self.ship.rect.height
         available_space_y = (self.settings.screen_height - (6 * alien_height) - ship_height)
         number_rows = available_space_y // (2 * alien_height)
+
         #* Creating the the full alien fleet
         for row_number in range(number_rows):    
             for alien_number in range(number_aliens_x):
@@ -156,6 +164,7 @@ class FourthDimensionInvasion:
             bullet.draw_bullet()
 
         self.aliens.draw(self.screen)
+
         #* Make the most recently drawn screen visible
         pygame.display.flip()
 
